@@ -4,9 +4,9 @@
 
 #include "llist.h"
 
-void test_create_node()
+void test_llist_create_node()
 {
-    Node *node = create_node(10);
+    LLNode *node = llist_create_node(10);
     assert(node != NULL);
     assert(node->data == 10);
     assert(node->next == NULL);
@@ -15,190 +15,209 @@ void test_create_node()
     printf("test_create_node passed.\n");
 }
 
-void test_prepend()
+void test_llist_prepend()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    prepend(&list, 10);
+    llist_prepend(&list, 10);
     assert(list.head->data == 10);
     assert(list.size == 1);
-    prepend(&list, 20);
+    llist_prepend(&list, 20);
     assert(list.size == 2);
     assert(list.head->data == 20);
     assert(list.head->next->data == 10);
-    prepend(&list, 30);
+    llist_prepend(&list, 30);
     assert(list.size == 3);
     assert(list.head->next->next->data == 10);
     assert(list.head->next->next->next == NULL);
 
-    printf("test_prepend passed.\n");
-    free_list(&list);
+    printf("test_llist_prepend passed.\n");
+    llist_deinit(&list);
 }
 
-void test_append()
+void test_llist_append()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    append(&list, 10);
+    llist_append(&list, 10);
     assert(list.size == 1);
     assert(list.head->data == 10);
-    append(&list, 20);
+    llist_append(&list, 20);
     assert(list.size == 2);
     assert(list.head->data == 10);
     assert(list.head->next->data == 20);
-    append(&list, 30);
+    llist_append(&list, 30);
     assert(list.size == 3);
     assert(list.head->next->next->data == 30);
     assert(list.head->next->next->next == NULL);
 
-    printf("test_append passed.\n");
-    free_list(&list);
+    printf("test_llist_append passed.\n");
+    llist_deinit(&list);
 }
 
-void test_insert_at()
+void test_llist_insert_at()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    insert_at(&list, 10, 0);
+    llist_insert_at(&list, 10, 0);
     assert(list.size == 1);
     assert(list.head->data == 10);
-    insert_at(&list, 20, -1);
+    llist_insert_at(&list, 20, -1);
     assert(list.size == 2);
     assert(list.head->data == 20);
     assert(list.head->next->data == 10);
-    insert_at(&list, 30, 10000);
+    llist_insert_at(&list, 30, 10000);
     assert(list.size == 3);
     assert(list.head->next->next->data == 30);
-    insert_at(&list, 40, 1);
+    llist_insert_at(&list, 40, 1);
     assert(list.size == 4);
     assert(list.head->next->next->data == 40);
     assert(list.head->next->next->next->data == 30);
     assert(list.head->next->next->next->next == NULL);
 
-    printf("test_insert_at passed.\n");
-    free_list(&list);
+    printf("test_llist_insert_at passed.\n");
+    llist_deinit(&list);
 }
 
 void test_insert_mixed()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    prepend(&list, 10);
-    append(&list, 20);
-    insert_at(&list, 30, 2);
+    llist_prepend(&list, 10);
+    llist_append(&list, 20);
+    llist_insert_at(&list, 30, 2);
     assert(list.size == 3);
     assert(list.head->data == 10);
     assert(list.head->next->data == 20);
     assert(list.head->next->next->data == 30);
 
     printf("test_insert_mixed passed.\n");
-    free_list(&list);
+    llist_deinit(&list);
 }
 
-void test_delete_head()
+void test_llist_delete_head()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    append(&list, 10);
-    append(&list, 20);
-    append(&list, 30);
+    llist_append(&list, 10);
+    llist_append(&list, 20);
+    llist_append(&list, 30);
     assert(list.head->data == 10);
     assert(list.head->next->next->data == 30);
     assert(list.size == 3);
 
-    delete_head(&list);
+    llist_delete_head(&list);
     assert(list.head->data == 20);
     assert(list.head->next->next == NULL);
     assert(list.size == 2);
 
-    printf("test_delete_head passed.\n");
-    free_list(&list);
+    printf("test_llist_delete_head passed.\n");
+    llist_deinit(&list);
 }
 
-void test_delete_tail()
+void test_llist_delete_tail()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    append(&list, 10);
-    append(&list, 20);
-    append(&list, 30);
+    llist_append(&list, 10);
+    llist_append(&list, 20);
+    llist_append(&list, 30);
     assert(list.head->data == 10);
     assert(list.head->next->next->data == 30);
     assert(list.size == 3);
 
-    delete_tail(&list);
+    llist_delete_tail(&list);
     assert(list.head->data == 10);
     assert(list.head->next->data == 20);
     assert(list.head->next->next == NULL);
     assert(list.size == 2);
 
-    printf("test_delete_tail passed.\n");
-    free_list(&list);
+    printf("test_llist_delete_tail passed.\n");
+    llist_deinit(&list);
 }
 
-void test_delete_value()
+void test_llist_delete_value()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    append(&list, 10);
-    append(&list, 20);
-    append(&list, 30);
+    llist_append(&list, 10);
+    llist_append(&list, 20);
+    llist_append(&list, 30);
     assert(list.head->data == 10);
     assert(list.head->next->next->data == 30);
     assert(list.size == 3);
 
-    delete_value(&list, 20);
+    llist_delete_value(&list, 20);
     assert(list.head->data == 10);
     assert(list.head->next->data == 30);
     assert(list.head->next->next == NULL);
     assert(list.size == 2);
 
-    printf("test_delete_value passed.\n");
-    free_list(&list);
+    printf("test_llist_delete_value passed.\n");
+    llist_deinit(&list);
 }
 
-void test_delete_at()
+void test_llist_delete_at()
 {
     LList list;
-    init(&list);
+    llist_init(&list);
 
-    append(&list, 10);
-    append(&list, 20);
-    append(&list, 30);
-    append(&list, 40);
+    llist_append(&list, 10);
+    llist_append(&list, 20);
+    llist_append(&list, 30);
+    llist_append(&list, 40);
     assert(list.head->data == 10);
     assert(list.head->next->next->next->data == 40);
     assert(list.size == 4);
 
-    delete_at(&list, 2); // delete value 30
+    llist_delete_at(&list, 2); // delete value 30
     assert(list.head->data == 10);
     assert(list.head->next->data == 20);
     assert(list.head->next->next->data == 40);\
     assert(list.head->next->next->next == NULL);
     assert(list.size == 3);
 
-    printf("test_delete_at passed.\n");
-    free_list(&list);
+    printf("test_llist_delete_at passed.\n");
+    llist_deinit(&list);
+}
+
+void test_llist_print()
+{
+    LList list;
+    llist_init(&list);
+
+    printf("Adding 10.\n");
+    llist_append(&list, 10);
+    printf("Adding 20.\n");
+    llist_append(&list, 20);
+    printf("Adding 30.\n");
+    llist_append(&list, 30);
+    printf("Printing list:\n");
+    llist_print(&list);
+
+    printf("test_llist_print passed.\n");
+    llist_deinit(&list);
 }
 
 void run_all_tests()
 {
-    test_create_node();
-    test_prepend();
-    test_append();
-    test_insert_at();
+    test_llist_create_node();
+    test_llist_prepend();
+    test_llist_append();
+    test_llist_insert_at();
     test_insert_mixed();
-    test_delete_head();
-    test_delete_tail();
-    test_delete_value();
-    test_delete_at();
+    test_llist_delete_head();
+    test_llist_delete_tail();
+    test_llist_delete_value();
+    test_llist_delete_at();
+    test_llist_print();
 }
 
 int main(void)

@@ -1,6 +1,6 @@
 # Variables
 CC = gcc
-# Really display all warnings and enforce standard, make all warnings errors, tell if there is a mem leak
+# Really display all warnings and be pedatic, make all warnings errors, tell if there is a mem leak
 CFLAGS = -Iinclude -Wall -Wextra -pedantic -Werror -fsanitize=address
 VPATH = src include
 
@@ -9,9 +9,9 @@ TARGET_APP = app.out
 TARGET_TEST = tests.out
 
 # Source files
-#SRC_APP = main.c llists.c
-SRC_APP = llist.c
-SRC_TEST = llisttests.c llist.c
+#SRC_APP = main.c btree.c
+SRC_APP = btree.c
+SRC_TEST = btreetests.c btree.c
 
 # Targets
 .PHONY: all clean run_tests run_app

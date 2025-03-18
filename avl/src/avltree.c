@@ -3,57 +3,44 @@
 
 #include "avltree.h"
 
-/*
-struct Node {
-    int data;
-    int height;
-    Node *left;
-    Node *right;
-};
-
-struct AVLTree {
-    Node *root;
-};
-*/
-
-void init(AVLTree *tree)
+void avltree_init(AVLTree *tree)
 {
     tree->root = NULL;
 }
 
-void free_tree(AVLTree *tree)
+void avltree_deinit(AVLTree *tree)
 {
-    free_subtree(tree->root);
+    avltree_free_stree(tree->root);
     tree->root = NULL;
 }
 
-void free_subtree(Node *node)
+void avltree_free_stree(AVLNode *node)
 {
     if (node != NULL) {
-        free_subtree(node->left);
-        free_subtree(node->right);
+        avltree_free_stree(node->left);
+        avltree_free_stree(node->right);
         free(node);
     }
 }
 
-int height(const Node *node)
+int avlnode_height(const AVLNode *node)
 {
     return node == NULL ? 0 : node->height;
 }
 
-void set_height(Node *node)
+void avlnode_set_height(AVLNode *node)
 {
-    int left_height = height(node->left);
-    int right_height = height(node->right);
+    int left_height = avlnode_height(node->left);
+    int right_height = avlnode_height(node->right);
     node->height = 1 + ((left_height > right_height) ? left_height : right_height);
 }
 
-int bfactor(const Node *node)
+int avlnode_bfactor(const AVLNode *node)
 {
-    return node == NULL ? 0 : height(node->left) - height(node->right);
+    return node == NULL ? 0 : avlnode_height(node->left) - avlnode_height(node->right);
 }
 
-Node* minimum(Node *node)
+AVLNode* avltree_minimum(AVLNode *node)
 {
     while (node->left != NULL) {
         node = node->left;
@@ -62,9 +49,9 @@ Node* minimum(Node *node)
     return node;
 }
 
-Node* create_node(int data)
+AVLNode* avltree_create_node(int data)
 {
-    Node *new_node = (Node*)malloc(sizeof(Node));
+    AVLNode *new_node = (AVLNode*)malloc(sizeof(AVLNode));
     if (new_node == NULL) {
         printf("Failed to allocate memory.\n");
         exit(-1);
@@ -77,7 +64,7 @@ Node* create_node(int data)
     return new_node;
 }
 
-void _print(const Node *node, int lvl) {
+void avltree_print_stree(const AVLNode *node, int lvl) {
     if (node == NULL) {
         return;
     }
@@ -91,7 +78,7 @@ void _print(const Node *node, int lvl) {
     int nextlvl = lvl + 1;
 
     if (node->left != NULL) {
-        _print(node->left, nextlvl);
+        avltree_print_stree(node->left, nextlvl);
     } else {
         for (int i = 0; i < nextlvl; i++) {
             printf("    ");
@@ -100,7 +87,7 @@ void _print(const Node *node, int lvl) {
     }
 
     if (node->right != NULL) {
-        _print(node->right, nextlvl);
+        avltree_print_stree(node->right, nextlvl);
     } else {
         for (int i = 0; i < nextlvl; i++) {
             printf("    ");
@@ -109,14 +96,14 @@ void _print(const Node *node, int lvl) {
     }
 }
 
-void print(const AVLTree *tree) {
-    _print(tree->root, 0);
+void avltree_print(const AVLTree *tree) {
+    avltree_print_stree(tree->root, 0);
 }
 
-Node* _insert(Node *node, int data)
+AVLNode* _avltree_insert(AVLNode *node, int data)
 {
     if (node == NULL) {
-        Node *new_node = create_node(data);
+        AVLNode *new_node = avltree_create_node(data);
         return new_node;
     }
 
@@ -125,33 +112,33 @@ Node* _insert(Node *node, int data)
     }
 
     if (data < node->data) {
-        node->left = _insert(node->left, data);
+        node->left = _avltree_insert(node->left, data);
     } else {
-        node->right = _insert(node->right, data);
+        node->right = _avltree_insert(node->right, data);
     }
 
-    set_height(node);
+    avlnode_set_height(node);
     return rebal(node);
 }
 
-void insert(AVLTree *tree, int data)
+void avltree_insert(AVLTree *tree, int data)
 {
-    tree->root = _insert(tree->root, data);
+    tree->root = _avltree_insert(tree->root, data);
 }
 
-Node* _remove_node(Node *node, int data)
+AVLNode* _avltree_remove(AVLNode *node, int data)
 {
     if (node == NULL) {
         return node;
     }
 
     if (data < node->data) {
-        _remove_node(node->left, data);
+        _avltree_remove(node->left, data);
     } else if (data > node->data) {
-        _remove_node(node->right, data);
+        _avltree_remove(node->right, data);
     } else {
         if ((node->right == NULL) || (node->left == NULL)) { // check if one or no child
-            Node *tmp = (node->left != NULL) ? node->left : node->right;
+            AVLNode *tmp = (node->left != NULL) ? node->left : node->right;
             if (tmp == NULL) { // no child
                 tmp = node;
                 node = NULL;
@@ -160,22 +147,22 @@ Node* _remove_node(Node *node, int data)
             }
             free(tmp);
         } else { // two children
-            Node *tmp = minimum(node->right); // get the successor of the deleted node
+            AVLNode *tmp = avltree_minimum(node->right); // get the successor of the deleted node
             node->data = tmp->data; // assign the data in the temp to the node to be "deleted"
-            node->right = _remove_node(node->right, tmp->data); // remove the successor of the node
+            node->right = _avltree_remove(node->right, tmp->data); // remove the successor of the node
         }
     }
 
-    set_height(node);
+    avlnode_set_height(node);
     return rebal(node);
 }
 
-void remove_node(AVLTree *tree, int data)
+void avltree_remove(AVLTree *tree, int data)
 {
-    tree->root = _remove_node(tree->root, data);
+    tree->root = _avltree_remove(tree->root, data);
 }
 
-Node* _remove_subtree(Node *node, int data)
+AVLNode* _avltree_remove_stree(AVLNode *node, int data)
 {
     if (node == NULL) {
         printf("Value not found\n");
@@ -183,64 +170,64 @@ Node* _remove_subtree(Node *node, int data)
     }
 
     if (data < node->data) {
-        _remove_subtree(node->left, data);
+        _avltree_remove_stree(node->left, data);
     } else if (data > node->data) {
-        _remove_subtree(node->right, data);
+        _avltree_remove_stree(node->right, data);
     } else {
-        free_subtree(node);
+        avltree_free_stree(node);
         node = NULL;
         return node;
     }
 
-    set_height(node);
+    avlnode_set_height(node);
     return rebal(node);
 }
 
-void remove_subtree(AVLTree *tree, int data)
+void avltree_remove_stree(AVLTree *tree, int data)
 {
-    tree->root = _remove_subtree(tree->root, data);
+    tree->root = _avltree_remove_stree(tree->root, data);
 }
 
 // right-right case, left rotation
-Node* rr(Node *node)
+AVLNode* rr(AVLNode *node)
 {
-    Node *left_node = node->left;
-    Node *right_left_node = left_node->right;
+    AVLNode *left_node = node->left;
+    AVLNode *right_left_node = left_node->right;
 
     left_node->right = node;
     node->left = right_left_node;
 
-    set_height(node);
-    set_height(left_node);
+    avlnode_set_height(node);
+    avlnode_set_height(left_node);
     return left_node;
 }
 
 // left-left case, right rotation
-Node* ll(Node *node)
+AVLNode* ll(AVLNode *node)
 {
-    Node *right_node = node->right;
-    Node *left_right_node = right_node->left;
+    AVLNode *right_node = node->right;
+    AVLNode *left_right_node = right_node->left;
 
     right_node->left = node;
     node->right = left_right_node;
 
-    set_height(node);
-    set_height(right_node);
+    avlnode_set_height(node);
+    avlnode_set_height(right_node);
     return right_node;
 }
 
-Node* rebal(Node *node)
+AVLNode* rebal(AVLNode *node)
 {
-    int bal = bfactor(node);
+    int bal = avlnode_bfactor(node);
 
-    if (bal > 1 && bfactor(node->left) >= 0) {
+    if (bal > 1 && avlnode_bfactor(node->left) >= 0) {
         return rr(node);
-    } else if (bal < -1 && bfactor(node->right) <= 0) {
+    } else if (bal < -1 && avlnode_bfactor(node->right) <= 0) {
         return ll(node);
-    } else if (bal > 1 && bfactor(node->left) <= 0) {
+    } else if (bal > 1 && avlnode_bfactor(node->left) <= 0) {
         node->left = ll(node->left);
         return rr(node);
-    } else if (bal < -1 && bfactor(node->right) >= 0) {
+    } else if (bal < -1 && avlnode_bfactor(node->right) >= 0) {
         node->right = rr(node->right);
         return ll(node);
     }
@@ -248,7 +235,7 @@ Node* rebal(Node *node)
     return node;
 }
 
-void _inorder(const Node *node)
+void _inorder(const AVLNode *node)
 {
     if (node != NULL) {
         _inorder(node->left);

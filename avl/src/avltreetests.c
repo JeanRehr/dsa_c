@@ -4,115 +4,115 @@
 
 #include "avltree.h"
 
-void test_create_node()
+void test_avltree_create_node()
 {
-    Node *node = create_node(10);
+    Node *node = avltree_create_node(10);
     assert(node != NULL);
     assert(node->data == 10);
     assert(node->height == 1);
     assert(node->left == NULL);
     assert(node->right == NULL);
     free(node);
-    printf("test_create_node passed.\n");
+    printf("test_avltree_create_node passed.\n");
 }
 
-void test_insert()
+void test_avltree_insert()
 {
     AVLTree tree;
-    init(&tree);
+    avltree_init(&tree);
 
-    insert(&tree, 10);
+    avltree_insert(&tree, 10);
     assert(tree.root != NULL);
     assert(tree.root->data == 10);
     assert(tree.root->height == 1);
 
-    insert(&tree, 10);
+    avltree_insert(&tree, 10);
     assert(tree.root->data == 10);
     assert(tree.root->left == NULL);
     assert(tree.root->right == NULL);
 
-    insert(&tree, 20);
+    avltree_insert(&tree, 20);
     assert(tree.root->right != NULL);
     assert(tree.root->right->data == 20);
     assert(tree.root->right->height == 1);
     assert(tree.root->height == 2);
 
-    insert(&tree, 5);
+    avltree_insert(&tree, 5);
     assert(tree.root->left != NULL);
     assert(tree.root->left->data == 5);
     assert(tree.root->right->height == 1);
     assert(tree.root->height == 2);
 
-    insert(&tree, 4);
+    avltree_insert(&tree, 4);
     assert(tree.root->left->left != NULL);
     assert(tree.root->left->left->data == 4);
     assert(tree.root->left->left->height == 1);
     assert(tree.root->left->height == 2);
     assert(tree.root->height == 3);
 
-    printf("test_insert passed.\n");
-    free_tree(&tree);
+    printf("test_avltree_insert passed.\n");
+    avltree_deinit(&tree);
 }
 
-void test_remove()
+void test_avltree_remove()
 {
     AVLTree tree;
-    init(&tree);
+    avltree_init(&tree);
 
-    insert(&tree, 10);
-    insert(&tree, 20);
-    insert(&tree, 5);
-    insert(&tree, 4);
+    avltree_insert(&tree, 10);
+    avltree_insert(&tree, 20);
+    avltree_insert(&tree, 5);
+    avltree_insert(&tree, 4);
 
-    remove_node(&tree, 1000);
-    remove_node(&tree, 5);
+    avltree_remove(&tree, 1000);
+    avltree_remove(&tree, 5);
     assert(tree.root->left->data != 5);
     assert(tree.root->left->data == 4);
 
-    printf("test_remove passed.\n");
-    free_tree(&tree);
+    printf("test_avltree_remove passed.\n");
+    avltree_deinit(&tree);
 }
 
-void test_remove_subtree()
+void test_avltree_remove_stree()
 {
     AVLTree tree;
-    init(&tree);
+    avltree_init(&tree);
 
-    insert(&tree, 10);
-    insert(&tree, 5);
-    insert(&tree, 15);
-    remove_subtree(&tree, tree.root->data);
+    avltree_insert(&tree, 10);
+    avltree_insert(&tree, 5);
+    avltree_insert(&tree, 15);
+    avltree_remove_stree(&tree, tree.root->data);
 
     assert(tree.root == NULL);
 
-    printf("test_remove_subtree passed.\n");
-    free_tree(&tree);
+    printf("test_avltree_remove_stree passed.\n");
+    avltree_deinit(&tree);
 }
 
 void test_balancing()
 {
     AVLTree tree;
-    init(&tree);
+    avltree_init(&tree);
 
-    insert(&tree, 5);
+    avltree_insert(&tree, 5);
     assert(tree.root->data == 5);
-    insert(&tree, 10);
+    avltree_insert(&tree, 10);
     assert(tree.root->data == 5);
-    insert(&tree, 15);
+    avltree_insert(&tree, 15);
     assert(tree.root->data == 10);
     assert(tree.root->left->data == 5);
     assert(tree.root->right->data == 15);
-    remove_subtree(&tree, tree.root->data);
+    avltree_remove_stree(&tree, tree.root->data);
 
-    insert(&tree, 15);
+    avltree_insert(&tree, 15);
     assert(tree.root->data == 15);
-    insert(&tree, 10);
+    avltree_insert(&tree, 10);
     assert(tree.root->data == 15);
-    insert(&tree, 5);
+    avltree_insert(&tree, 5);
     assert(tree.root->data == 10);
     assert(tree.root->left->data == 5);
     assert(tree.root->right->data == 15);
-    remove_subtree(&tree, tree.root->data);
+    avltree_remove_stree(&tree, tree.root->data);
 
 /*
        4                 2
@@ -123,23 +123,23 @@ void test_balancing()
   /
 -1
 */
-    insert(&tree, 4);
-    insert(&tree, 2);
-    insert(&tree, 6);
-    insert(&tree, 1);
-    insert(&tree, 3);
+    avltree_insert(&tree, 4);
+    avltree_insert(&tree, 2);
+    avltree_insert(&tree, 6);
+    avltree_insert(&tree, 1);
+    avltree_insert(&tree, 3);
     assert(tree.root->data == 4);
     assert(tree.root->left->data == 2);
     assert(tree.root->right->data == 6);
     assert(tree.root->left->left->data == 1);
     assert(tree.root->left->right->data == 3);
     
-    insert(&tree, -1);
+    avltree_insert(&tree, -1);
     assert(tree.root->data == 2);
     assert(tree.root->left->data == 1);
     assert(tree.root->right->data == 4);
     assert(tree.root->right->left->data == 3);
-    remove_subtree(&tree, tree.root->data);
+    avltree_remove_stree(&tree, tree.root->data);
 
 /*
   4                     6
@@ -150,50 +150,69 @@ void test_balancing()
        \
         8
 */
-    insert(&tree, 4);
-    insert(&tree, 2);
-    insert(&tree, 6);
-    insert(&tree, 5);
-    insert(&tree, 7);
+    avltree_insert(&tree, 4);
+    avltree_insert(&tree, 2);
+    avltree_insert(&tree, 6);
+    avltree_insert(&tree, 5);
+    avltree_insert(&tree, 7);
     assert(tree.root->data == 4);
     assert(tree.root->left->data == 2);
     assert(tree.root->right->data == 6);
     assert(tree.root->right->left->data == 5);
     assert(tree.root->right->right->data == 7);
     
-    insert(&tree, 8);
+    avltree_insert(&tree, 8);
     assert(tree.root->data == 6);
     assert(tree.root->left->data == 4);
     assert(tree.root->right->data == 7);
     assert(tree.root->left->right->data == 5);
 
     printf("test_balancing passed.\n");
-    free_tree(&tree);
+    avltree_deinit(&tree);
 }
 
-void test_free_tree()
+void test_avltree_deinit()
 {
     AVLTree tree;
-    init(&tree);
+    avltree_init(&tree);
 
-    insert(&tree, 10);
-    insert(&tree, 20);
-    insert(&tree, 5);
+    avltree_insert(&tree, 10);
+    avltree_insert(&tree, 20);
+    avltree_insert(&tree, 5);
 
-    free_tree(&tree);
+    avltree_deinit(&tree);
     assert(tree.root == NULL);
 
-    printf("test_free_tree passed.\n");
+    printf("test_avltree_deinit passed.\n");
+}
+
+void test_avltree_print()
+{
+    AVLTree tree;
+    avltree_init(&tree);
+
+    printf("Adding 10.\n");
+    avltree_insert(&tree, 10);
+    printf("Adding 20.\n");
+    avltree_insert(&tree, 20);
+    printf("Adding 5.\n");
+    avltree_insert(&tree, 5);
+    printf("Printing tree:\n");
+    avltree_print(&tree);
+
+    avltree_deinit(&tree);
+    printf("test_avltree_print passed.\n");
 }
 
 void all_tests_run()
 {
-    test_create_node();    
-    test_insert();    
-    test_remove();    
-    test_remove_subtree();    
+    test_avltree_create_node();    
+    test_avltree_insert();    
+    test_avltree_remove();    
+    test_avltree_remove_stree();    
     test_balancing();    
-    test_free_tree();
+    test_avltree_deinit();
+    test_avltree_print();
 }
 
 int main(void)

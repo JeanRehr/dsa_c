@@ -1,46 +1,46 @@
 #ifndef AVLTREE_H
 #define AVLTREE_H
 
-typedef struct Node {
+typedef struct AVLNode {
     int data;
     int height;
-    struct Node *left;
-    struct Node *right;
-} Node;
+    struct AVLNode *left;
+    struct AVLNode *right;
+} AVLNode;
 
 typedef struct AVLTree {
-    Node *root;
+    AVLNode *root;
 } AVLTree;
 
-void init(AVLTree *tree);
+void avltree_init(AVLTree *tree);
 
-void free_tree(AVLTree *tree);
+void avltree_deinit(AVLTree *tree);
 
-void free_subtree(Node *node);
+void avltree_free_stree(AVLNode *node);
 
-int height(const Node *node);
+int avlnode_height(const AVLNode *node);
 
-void set_height(Node *node);
+void avlnode_set_height(AVLNode *node);
 
-int bfactor(const Node *node);
+int avlnode_bfactor(const AVLNode *node);
 
-Node* minimum(Node *node);
+AVLNode* avltree_minimum(AVLNode *node);
 
-Node* create_node(int data);
+AVLNode* avltree_create_node(int data);
 
-void print(const AVLTree *tree);
+void avltree_print(const AVLTree *tree);
 
-void insert(AVLTree *tree, int data);
+void avltree_insert(AVLTree *tree, int data);
 
-void remove_node(AVLTree *tree, int data);
+void avltree_remove(AVLTree *tree, int data);
 
-void remove_subtree(AVLTree *tree, int data);
+void avltree_remove_stree(AVLTree *tree, int data);
 
-Node* rr(Node *node);
+AVLNode* rr(AVLNode *node);
 
-Node* ll(Node *node);
+AVLNode* ll(AVLNode *node);
 
-Node* rebal(Node *node);
+AVLNode* rebal(AVLNode *node);
 
 void inorder(const AVLTree *tree);
 

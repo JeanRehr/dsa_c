@@ -1,36 +1,36 @@
 #ifndef LLIST_H
 #define LLIST_H
 
-typedef struct Node {
+typedef struct LLNode {
     int data;
-    struct Node *next;
-} Node;
+    struct LLNode *next;
+} LLNode;
 
 typedef struct LList {
     int size;
-    Node *head;
+    LLNode *head;
 } LList;
 
-void init(LList *list);
+void llist_init(LList *list);
 
-void free_list(LList *list);
+void llist_deinit(LList *list);
 
-Node* create_node(int data);
+LLNode* llist_create_node(int data);
 
-void prepend(LList *list, int data);
+void llist_prepend(LList *list, int data);
 
-void append(LList *list, int data);
+void llist_append(LList *list, int data);
 
-void insert_at(LList *list, int data, int pos);
+void llist_insert_at(LList *list, int data, int pos);
 
-void delete_head(LList *list);
+void llist_delete_head(LList *list);
 
-void delete_tail(LList *list);
+void llist_delete_tail(LList *list);
 
-void delete_value(LList *list, int data);
+void llist_delete_value(LList *list, int data);
 
-void delete_at(LList *list, int pos);
+void llist_delete_at(LList *list, int pos);
 
-void print_list(LList *list);
+void llist_print(const LList *list);
 
 #endif

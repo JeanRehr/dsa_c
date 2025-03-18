@@ -3,20 +3,7 @@
 
 #include "llist.h"
 
-/*
-struct Node {
-    int data;
-    Node *next;
-};
-
-struct LList
-{
-    int size;
-    Node *head;
-};
-*/
-
-void init(LList *list)
+void llist_init(LList *list)
 {
     if (list != NULL) {
         list->head = NULL;
@@ -24,10 +11,10 @@ void init(LList *list)
     }
 }
 
-void free_list(LList *list)
+void llist_deinit(LList *list)
 {
-    Node *current = list->head;
-    Node *next = NULL;
+    LLNode *current = list->head;
+    LLNode *next = NULL;
     while (current != NULL) {
         next = current->next;
         free(current);
@@ -38,9 +25,9 @@ void free_list(LList *list)
     list->head = NULL;
 }
 
-Node* create_node(int data)
+LLNode* llist_create_node(int data)
 {
-    Node *new_node = (Node*)malloc(sizeof(Node));
+    LLNode *new_node = (LLNode*)malloc(sizeof(LLNode));
     
     if (new_node == NULL) {
         exit(EXIT_FAILURE);
@@ -51,24 +38,24 @@ Node* create_node(int data)
     return new_node;
 }
 
-void prepend(LList *list, int data)
+void llist_prepend(LList *list, int data)
 {
-    Node *new_node = create_node(data);
+    LLNode *new_node = llist_create_node(data);
 
     new_node->next = list->head;
     list->head = new_node;
     list->size += 1;
 }
 
-void append(LList *list, int data)
+void llist_append(LList *list, int data)
 {
     if (list->size == 0) {
-        prepend(list, data);
+        llist_prepend(list, data);
         return;
     }
 
-    Node *new_node = create_node(data);
-    Node *current = list->head;
+    LLNode *new_node = llist_create_node(data);
+    LLNode *current = list->head;
 
     while (current->next != NULL) {
         current = current->next;
@@ -78,56 +65,56 @@ void append(LList *list, int data)
     list->size += 1;
 }
 
-void insert_at(LList *list, int data, int pos)
+void llist_insert_at(LList *list, int data, int pos)
 {
     if (list->size == 0 || pos <= 0) {
-        prepend(list, data);
+        llist_prepend(list, data);
         return;
     }
 
     if (pos >= list->size) {
-        append(list, data);
+        llist_append(list, data);
         return;
     }
 
-    Node *current = list->head;
+    LLNode *current = list->head;
     for (int i = 0; i < pos; i++) {
         current = current->next;
     }
 
-    Node *new_node = create_node(data);
-    Node *tmp = current->next;
+    LLNode *new_node = llist_create_node(data);
+    LLNode *tmp = current->next;
     current->next = new_node;
     new_node->next = tmp;
     list->size += 1;
 }
 
-void delete_head(LList *list)
+void llist_delete_head(LList *list)
 {
     if (list->size == 0) {
         return;
     }
 
-    Node *tmp = list->head;
+    LLNode *tmp = list->head;
     list->head = list->head->next;
 
     free(tmp);
     list->size -= 1;
 }
 
-void delete_tail(LList *list)
+void llist_delete_tail(LList *list)
 {
     if (list->size == 0) {
         return;
     }
 
     if (list->size == 1) {
-        delete_head(list);
+        llist_delete_head(list);
         list->size = 0;
         return;
     }
 
-    Node *second_last = list->head;
+    LLNode *second_last = list->head;
 
     for (int i = 0; i < list->size - 2; i++) {
         second_last = second_last->next;
@@ -140,26 +127,26 @@ void delete_tail(LList *list)
     assign it to null and free the tmp
     */
 
-    Node *tmp = second_last->next;
+    LLNode *tmp = second_last->next;
     second_last->next = NULL;
     free(tmp);
     list->size -= 1;
 }
 
-void delete_value(LList *list, int data)
+void llist_delete_value(LList *list, int data)
 {
-    Node *current = list->head;
+    LLNode *current = list->head;
 
     if (list->size == 0) {
         return;
     }
 
     if (current->data == data) {
-        delete_head(list);
+        llist_delete_head(list);
         return;
     }
 
-    Node *previous = NULL;
+    LLNode *previous = NULL;
     while (current != NULL && current->data != data) {
         previous = current;
         current = current->next;
@@ -182,19 +169,19 @@ void delete_value(LList *list, int data)
     list->size -= 1;
 }
 
-void delete_at(LList *list, int pos)
+void llist_delete_at(LList *list, int pos)
 {
     if (list->size == 0) {
         return;
     }
 
     if (pos <= 0) {
-        delete_head(list);
+        llist_delete_head(list);
         return;
     }
 
     if (pos >= list->size) {
-        delete_tail(list);
+        llist_delete_tail(list);
         return;
     }
 
@@ -207,20 +194,20 @@ void delete_at(LList *list, int pos)
     free tmp
     */
 
-    Node *current = list->head;
+    LLNode *current = list->head;
     for (int i = 0; i < pos - 1; i++) {
         current = current->next;
     }
 
-    Node *tmp = current->next;
+    LLNode *tmp = current->next;
     current->next = tmp->next;
     free(tmp);
     list->size -= 1;
 }
 
-void print_list(LList *list)
+void llist_print(const LList *list)
 {
-    Node *current = list->head;
+    LLNode *current = list->head;
 
     while (current != NULL) {
         printf("%d->", current->data);

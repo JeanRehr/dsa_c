@@ -1,12 +1,12 @@
 # Variables
 CC = gcc
-# Really display all warnings and be pedatic, make all warnings errors, tell if there is a mem leak
+# Really display all warnings and enforce standard, make all warnings errors, tell if there is a mem leak
 CFLAGS = -Iinclude -Wall -Wextra -pedantic -Werror -fsanitize=address
 VPATH = src include
 
 # Binary targets
-TARGET_APP = app
-TARGET_TEST = tests
+TARGET_APP = app.out
+TARGET_TEST = tests.out
 
 # Source files
 #SRC_APP = main.c avltree.c
@@ -33,14 +33,13 @@ run_app: $(TARGET_APP)
 clean:
 	rm -f $(TARGET_APP) $(TARGET_TEST)
 
-#Explanation\
-Variables:\
+#Variables:\
 	CC: Specifies the compiler (gcc).\
 	CFLAGS: Includes flags for displaying all warnings and specifying include paths (include/).\
 Targets:\
 	all: Default target that builds both the application and tests.\
 	$(TARGET_APP): Builds the driver code (main.c). Assumes output executable is app.\
-	$(TARGET_TEST): Builds the test suite (avltreetests.c). Assumes output executable is tests.\
+	$(TARGET_TEST): Builds the test suite (*tests.c). Assumes output executable is tests.\
 	run_tests: Executes tests.\
 	run_app: Runs the application.\
 	clean: Removes generated executables to clean up the directory.\
