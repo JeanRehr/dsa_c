@@ -24,7 +24,7 @@ void avlnode_set_height(AVLNode *node);
 
 int avlnode_bfactor(const AVLNode *node);
 
-AVLNode* avltree_minimum(AVLNode *node);
+AVLNode* avltree_minimum(const AVLNode *node);
 
 AVLNode* avltree_create_node(int data);
 
@@ -44,4 +44,4 @@ AVLNode* rebal(AVLNode *node);
 
 void inorder(const AVLTree *tree);
 
-#endif
+#endif // AVLTREE_H

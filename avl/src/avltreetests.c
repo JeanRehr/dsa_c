@@ -6,7 +6,7 @@
 
 void test_avltree_create_node()
 {
-    Node *node = avltree_create_node(10);
+    AVLNode *node = avltree_create_node(10);
     assert(node != NULL);
     assert(node->data == 10);
     assert(node->height == 1);
@@ -218,5 +218,5 @@ void all_tests_run()
 int main(void)
 {
     all_tests_run();
-    return 0;
+    return EXIT_SUCCESS;
 }

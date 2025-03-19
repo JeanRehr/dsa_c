@@ -40,13 +40,13 @@ int avlnode_bfactor(const AVLNode *node)
     return node == NULL ? 0 : avlnode_height(node->left) - avlnode_height(node->right);
 }
 
-AVLNode* avltree_minimum(AVLNode *node)
+AVLNode* avltree_minimum(const AVLNode *node)
 {
     while (node->left != NULL) {
         node = node->left;
     }
 
-    return node;
+    return (AVLNode *) node; // the return type is a mutable pointer and needs to be casted
 }
 
 AVLNode* avltree_create_node(int data)
@@ -54,7 +54,7 @@ AVLNode* avltree_create_node(int data)
     AVLNode *new_node = (AVLNode*)malloc(sizeof(AVLNode));
     if (new_node == NULL) {
         printf("Failed to allocate memory.\n");
-        exit(-1);
+        exit(EXIT_FAILURE);
     }
 
     new_node->data = data;
