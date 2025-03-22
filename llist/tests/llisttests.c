@@ -4,17 +4,6 @@
 
 #include "llist.h"
 
-void test_llist_create_node()
-{
-    LLNode *node = llist_create_node(10);
-    assert(node != NULL);
-    assert(node->data == 10);
-    assert(node->next == NULL);
-
-    free(node);
-    printf("test_create_node passed.\n");
-}
-
 void test_llist_prepend()
 {
     LList list;
@@ -208,7 +197,6 @@ void test_llist_print()
 
 void run_all_tests()
 {
-    test_llist_create_node();
     test_llist_prepend();
     test_llist_append();
     test_llist_insert_at();

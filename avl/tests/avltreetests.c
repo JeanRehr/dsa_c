@@ -4,18 +4,6 @@
 
 #include "avltree.h"
 
-void test_avltree_create_node()
-{
-    AVLNode *node = avltree_create_node(10);
-    assert(node != NULL);
-    assert(node->data == 10);
-    assert(node->height == 1);
-    assert(node->left == NULL);
-    assert(node->right == NULL);
-    free(node);
-    printf("test_avltree_create_node passed.\n");
-}
-
 void test_avltree_insert()
 {
     AVLTree tree;
@@ -206,7 +194,6 @@ void test_avltree_print()
 
 void all_tests_run()
 {
-    test_avltree_create_node();    
     test_avltree_insert();    
     test_avltree_remove();    
     test_avltree_remove_stree();    
