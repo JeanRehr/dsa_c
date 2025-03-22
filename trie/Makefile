@@ -4,13 +4,17 @@ SRC_DIR = src
 TEST_DIR = tests
 OBJ_DIR = obj
 
+# Debug flags for gdb
+#CFLAGS_DEBUG = -Iinclude -Wall -Wextra -pedantic -Werror -ggdb3 -fno-inline -DDEBUG -fno-stack-protector
+#LDFLAGS_DEBUG = # Leave empty unless there is linker-specific flags
+
 # Debug flags
-CFLAGS_DEBUG = -Iinclude -Wall -Wextra -pedantic -Werror -fsanitize=address -g
-LDFLAGS_DEBUG = -fsanitize=address
+CFLAGS_DEBUG = -Iinclude -Wall -Wextra -pedantic -Werror -fsanitize=address -fsanitize=undefined -fsanitize=leak -ggdb3 -fno-inline
+LDFLAGS_DEBUG = # Leave empty unless there is linker-specific flags
 
 # Release flags
-CFLAGS_RELEASE = -Iinclude -Wall -Wextra -O3 -DNDEBUG -fstack-protector-strong -fPIE
-LDFLAGS_RELEASE = -s -pie
+CFLAGS_RELEASE = -Iinclude -Wall -Wextra -O3 -DNDEBUG -fstack-protector-all -fPIE -flto
+LDFLAGS_RELEASE = -s -pie -flto
 
 # Default to debug build
 CFLAGS = $(CFLAGS_DEBUG)
@@ -114,7 +118,7 @@ Targets:\
 	run_app: Runs the main application.\
 	clean: Removes generated object files and executables to clean up the directory.\
 Usage:\
-	With this setup in place, you can use the following commands:\
+	With this setup in place, the following commands can be used:\
 		make or make debug: Builds both the application and test binaries in debug mode.\
 		make release: Builds both the application and test binaries in release mode.\
 		make run_app: Executes the main application.\
