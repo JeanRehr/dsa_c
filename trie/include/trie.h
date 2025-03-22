@@ -18,6 +18,10 @@ void trie_deinit(Trie *trie);
 
 void trie_insert(Trie *trie, const char *key);
 
-void trie_search(Trie *trie, const char *key);
+int trie_search(const Trie *trie, const char *key);
+
+void trie_remove(Trie *trie, const char *key);
+
+void trie_print(const Trie *trie);
 
 #endif // TRIE_H
