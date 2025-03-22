@@ -3,6 +3,19 @@
 
 #include "llist.h"
 
+LLNode* llist_create_node(int data)
+{
+    LLNode *new_node = (LLNode*)malloc(sizeof(LLNode));
+    
+    if (new_node == NULL) {
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->data = data;
+    new_node->next = NULL;
+    return new_node;
+}
+
 void llist_init(LList *list)
 {
     if (list != NULL) {
@@ -23,19 +36,6 @@ void llist_deinit(LList *list)
 
     list->size = 0;
     list->head = NULL;
-}
-
-LLNode* llist_create_node(int data)
-{
-    LLNode *new_node = (LLNode*)malloc(sizeof(LLNode));
-    
-    if (new_node == NULL) {
-        exit(EXIT_FAILURE);
-    }
-
-    new_node->data = data;
-    new_node->next = NULL;
-    return new_node;
 }
 
 void llist_prepend(LList *list, int data)
