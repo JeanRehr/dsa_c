@@ -16,31 +16,14 @@ void avltree_init(AVLTree *tree);
 
 void avltree_deinit(AVLTree *tree);
 
-void avltree_free_stree(AVLNode *node);
-
-int avlnode_height(const AVLNode *node);
-
-void avlnode_set_height(AVLNode *node);
-
-int avlnode_bfactor(const AVLNode *node);
-
-AVLNode* avltree_minimum(const AVLNode *node);
-
-AVLNode* avltree_create_node(int data);
-
 void avltree_print(const AVLTree *tree);
 
 void avltree_insert(AVLTree *tree, int data);
 
 void avltree_remove(AVLTree *tree, int data);
 
+// Will remove all children of the node that contains data
 void avltree_remove_stree(AVLTree *tree, int data);
-
-AVLNode* rr(AVLNode *node);
-
-AVLNode* ll(AVLNode *node);
-
-AVLNode* rebal(AVLNode *node);
 
 void inorder(const AVLTree *tree);
 

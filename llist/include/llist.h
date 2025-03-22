@@ -15,8 +15,6 @@ void llist_init(LList *list);
 
 void llist_deinit(LList *list);
 
-LLNode* llist_create_node(int data);
-
 void llist_prepend(LList *list, int data);
 
 void llist_append(LList *list, int data);
