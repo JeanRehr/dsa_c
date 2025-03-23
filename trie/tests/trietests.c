@@ -31,6 +31,7 @@ void test_trie_insert()
 
     trie_insert(&trie, "aaron");
     trie_insert(&trie, "ayrton");
+    trie_insert(&trie, "baba");
 
     // aaron
     assert(trie.root->children[0] != NULL);
@@ -48,6 +49,12 @@ void test_trie_insert()
     assert(trie.root->children[0]->children[24]->children[17]->children[19]->children[14] != NULL);
     assert(trie.root->children[0]->children[24]->children[17]->children[19]->children[14]->children[13] != NULL);
     assert(trie.root->children[0]->children[24]->children[17]->children[19]->children[14]->children[13]->is_end == 1);
+
+    // baba
+    assert(trie.root->children[1] != NULL);
+    assert(trie.root->children[1]->children[0] != NULL);
+    assert(trie.root->children[1]->children[0]->children[1] != NULL);
+    assert(trie.root->children[1]->children[0]->children[1]->children[0] != NULL);
 
     trie_deinit(&trie);
     printf("test_trie_insert passed.\n");

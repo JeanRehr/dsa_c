@@ -61,6 +61,27 @@ void trie_insert(Trie *trie, const char *key)
     current->is_end = 1;
 }
 
+int trie_search(const Trie *trie, const char *key)
+{
+    TrieNode *current = trie->root;
+    int index;
+
+    while (*key != '\0') {
+        index = *key - 'a';
+        if (current->children[index] == NULL) {
+            return 0;
+        }
+        current = current->children[index];
+        key++;
+    }
+
+    if (current->is_end == 1) {
+        return 1;
+    }
+
+    return 0;
+}
+
 int __max_depth(const TrieNode *node, int lvl)
 {
     int max_depth = lvl;
