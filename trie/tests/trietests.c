@@ -56,6 +56,11 @@ void test_trie_insert()
     assert(trie.root->children[1]->children[0]->children[1] != NULL);
     assert(trie.root->children[1]->children[0]->children[1]->children[0] != NULL);
 
+    // not supported characters, this will make the function return early
+    trie_insert(&trie, ",./,./,./");
+    trie_insert(&trie, "ABCDEFG");
+    trie_insert(&trie, "test space");
+
     trie_deinit(&trie);
     printf("test_trie_insert passed.\n");
 }
@@ -78,6 +83,33 @@ void test_trie_search()
     printf("test_trie_search passed.\n");
 }
 
+void test_trie_remove()
+{
+    Trie trie;
+    trie_init(&trie);
+
+    trie_insert(&trie, "abase");
+    trie_insert(&trie, "abased");
+    trie_insert(&trie, "abasement");
+    trie_insert(&trie, "wow");
+    trie_insert(&trie, "wanna");
+    trie_insert(&trie, "world");
+    assert(trie.root->children[0]->children[1]->children[0]->children[18]->children[4]->is_end == 1);
+    trie_remove(&trie, "abase");
+    assert(trie.root->children[0]->children[1]->children[0]->children[18]->children[4]->is_end == 0);
+    assert(trie.root->children[22]->children[14]->children[22]->is_end == 1);
+    assert(trie.root->children[22]->children[14]->children[22] != NULL);
+    assert(trie.root->children[22]->children[14] != NULL);
+    assert(trie.root->children[22] != NULL);
+    trie_remove(&trie, "wow");
+    assert(trie.root->children[22] != NULL);
+    assert(trie.root->children[22]->children[14] != NULL);
+    assert(trie.root->children[22]->children[14]->children[22] == NULL);
+
+    trie_deinit(&trie);
+    printf("test_trie_remove passed.\n");
+}
+
 void test_trie_print()
 {
     Trie trie;
@@ -91,6 +123,15 @@ void test_trie_print()
     trie_insert(&trie, "wanna");
     printf("Inserting about.\n");
     trie_insert(&trie, "about");
+    printf("Inserting ,./,./,./.\n");
+    trie_insert(&trie, ",./,./,./");
+    printf("Inserting ABCDEFG.\n");
+    trie_insert(&trie, "ABCDEFG");
+    printf("Inserting test space.\n");
+    trie_insert(&trie, "test space");
+    printf("Inserting test,comma.\n");
+    trie_insert(&trie, "test,comma");
+
     printf("Printing Trie.\n");
     trie_print(&trie);
 
@@ -104,6 +145,7 @@ void run_all_tests()
     test_trie_deinit();
     test_trie_insert();
     test_trie_search();
+    test_trie_remove();
     test_trie_print();
 }
 
