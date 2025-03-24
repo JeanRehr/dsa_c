@@ -47,10 +47,20 @@ void trie_deinit(Trie *trie)
 
 void trie_insert(Trie *trie, const char *key)
 {
+    if (trie->root == NULL) {
+        return;
+    }
+
     TrieNode *current = trie->root;
 
     while (*key != '\0') {
         int index = *key - 'a';
+
+        // Prevent buffer under/overflow
+        if (index < 0 || index > ALPHABET_SIZE) {
+            return; // Ignore invalid characters.
+        }
+
         if (current->children[index] == NULL) {
             TrieNode *new_node = _trie_create_node();
             current->children[index] = new_node;
@@ -63,11 +73,15 @@ void trie_insert(Trie *trie, const char *key)
 
 int trie_search(const Trie *trie, const char *key)
 {
+    if (trie->root == NULL) {
+        return 0;
+    }
+
     TrieNode *current = trie->root;
     int index;
 
     while (*key != '\0') {
-        index = *key - 'a';
+        int index = *key - 'a';
         if (current->children[index] == NULL) {
             return 0;
         }
@@ -75,8 +89,8 @@ int trie_search(const Trie *trie, const char *key)
         key++;
     }
 
-    if (current->is_end == 1) {
-        return 1;
+    return current->is_end;
+}
     }
 
     return 0;
@@ -106,12 +120,12 @@ void _trie_print(const TrieNode *node, char buf[], int lvl)
 {
     if (node->is_end == 1) {
         buf[lvl] = '\0';
-        printf("%s\n", buf);
+        printf("%s\n", buf); // Print the current word if it's a terminal node.
     }
 
     for (int i = 0; i < ALPHABET_SIZE; ++i) {
         if (node->children[i] != NULL) {
-            buf[lvl] = i + 'a';
+            buf[lvl] = i + 'a'; // Build prefix
             _trie_print(node->children[i], buf, lvl + 1);
         }
     }
@@ -119,7 +133,7 @@ void _trie_print(const TrieNode *node, char buf[], int lvl)
 
 void trie_print(const Trie *trie)
 {
-    const int len = _max_depth(trie);
+    const size_t len = _max_depth(trie);
     char buf[len + 1]; // +1 for the null byte
     memset(buf, 0, len * sizeof(char));
     _trie_print(trie->root, buf, 0);
