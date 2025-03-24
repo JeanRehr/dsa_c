@@ -78,7 +78,6 @@ int trie_search(const Trie *trie, const char *key)
     }
 
     TrieNode *current = trie->root;
-    int index;
 
     while (*key != '\0') {
         int index = *key - 'a';
@@ -91,9 +90,63 @@ int trie_search(const Trie *trie, const char *key)
 
     return current->is_end;
 }
+
+void trie_remove(Trie *trie, const char *key)
+{
+    if (trie->root == NULL) {
+        return;
     }
 
-    return 0;
+    TrieNode *current = trie->root;
+    TrieNode *stack[strlen(key)];
+    int index[strlen(key)];
+    int depth = 0;
+
+    // Traverse the Trie along the key whilst recording the path
+    while (*key != '\0') {
+        int char_index = *key - 'a';
+        if (current->children[char_index] == NULL) {
+            return;
+        }
+
+        stack[depth] = current;      // Save current node in stack.
+        index[depth] = char_index;   // Save index in path.
+        current = current->children[char_index];
+
+        depth++;
+        key++;
+    }
+
+    if (current->is_end == 0) {
+        return;
+    }
+
+    current->is_end = 0;
+
+    for (depth--; depth >= 0; depth--) {
+        current = stack[depth];
+        TrieNode *child_to_remove = current->children[index[depth]];
+
+        if (child_to_remove->is_end == 0) {
+            int removable = 1;
+            // Check if the node has children
+            for (int i = 0; i < ALPHABET_SIZE; i++) {
+                if (child_to_remove->children[i] != NULL) {
+                    removable = 0;
+                    break;
+                }
+            }
+            // If the node does not have children, remove it
+            if (removable) {
+                free(child_to_remove);
+                current->children[index[depth]] = NULL;
+            } else {
+                return;
+            }
+        } else {
+            break;
+        }
+    }
 }
 
 int __max_depth(const TrieNode *node, int lvl)
